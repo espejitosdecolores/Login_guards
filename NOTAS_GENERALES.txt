@@ -1,0 +1,30 @@
+# Tanto en login como en register podemos ingresar el usuario: eve.holt@reqres.in y cualquier password 
+    y el end point nos va a retornar el token visible en la consola del navegador
+
+# Vamos a usar el servicio users.service.ts que utiliza el HttpClient para hacer solicitudes tipo POST al endpoint 
+
+# El endpoint: https://reqres.in/api/ tiene los recurzos /login  y /register
+
+# Para las cookies: 
+    npm install ngx-cookie-service --save
+
+# Una vez guardadas en cookies el token seria tarea del backend, aplicar middleware de acuerdo al token recuperado.
+
+# Para logout,  borrar las coockies this.cookies.delete("token");
+
+# Guards: 
+    Conceptual: El guard es un servicio, hay varios, en este caso CanActivateFn. Basicamente si retorna true permite la ruta y sino false.
+    ng g guard tu-guard
+    export const tuGuardGuard: CanActivateFn = (route, state) => {
+    const usersService = inject(UsersService);
+    const router = inject(Router);
+
+    //Si viene falso del metodo autenticado entra en el if, y el guard bloquea ruta y redirige al login
+    if(!usersService.autenticado()){
+        router.navigateByUrl('/login');
+        return false;
+    }
+    return true;
+    };
+    en el app.routes.ts:
+        {path:'otra-ruta',component:RutaxComponent, canActivate:[tuGuardGuard]}
